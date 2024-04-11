@@ -57,10 +57,6 @@ plt.ylabel('deg')
 
 plt.tight_layout()
 
-
-# Анимация
-# Анимация
-# Анимация
 # Анимация
 def animate_baton(t, X, Y, Th, l):
     fig, ax = plt.subplots()
