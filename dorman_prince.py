@@ -9,7 +9,6 @@ m2 = 3.0  # масса массы 2
 J = 2.0  # момент инерции
 g = 9.81  # ускорение свободного падения
 
-
 # Система уравнений движения
 def equations(t, y):
     x, y, theta, vx, vy, omega = y
@@ -20,7 +19,6 @@ def equations(t, y):
     dvydt = -g
     domegadt = 0
     return [dxdt, dydt, dthetadt, dvxdt, dvydt, domegadt]
-
 
 # Метод Дормана-Принса для решения системы ОДУ
 def runge_kutta_dopri5(equations, t_span, y0, t_eval):
@@ -85,8 +83,8 @@ plt.tight_layout()
 # Анимация
 def animate_baton(t, X, Y, Th, l):
     fig, ax = plt.subplots()
-    ax.set_xlim([-5, 15])  # Подгоните границы по вашему усмотрению
-    ax.set_ylim([-10, 10])  # Подгоните границы по вашему усмотрению
+    ax.set_xlim([-5, 15]) 
+    ax.set_ylim([-10, 10])
     ax.grid(True)
     mass1, = ax.plot([], [], 'bo', markersize=10)
     mass2, = ax.plot([], [], 'ro', markersize=10)
@@ -114,6 +112,5 @@ def animate_baton(t, X, Y, Th, l):
 
     ani = FuncAnimation(fig, update, frames=len(t), interval=25, blit=True)
     plt.show()
-
-
+    
 animate_baton(t, X, Y, Th, l)
