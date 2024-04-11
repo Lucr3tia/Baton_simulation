@@ -47,9 +47,6 @@ def runge_kutta_dopri5(equations, t_span, y0, t_eval):
 
     return np.array(sol).T[:, :len(t_eval)]  # Ensure correct dimensions
 
-
-
-
 # Начальные условия
 y0 = [1.0, 1.0, np.pi / 2, 7.0, 12.0, 25.0]
 
