@@ -55,10 +55,10 @@ def runge_kutta_dopri8(equations, t_span, y0, t_eval):
 y0 = [1.0, 1.0, np.pi / 2, 7.0, 12.0, 25.0]
 
 # Время
-t_span = [0, 3]
+t_span = [0, 300]
 
 # Решение системы уравнений
-t_eval = np.linspace(t_span[0], t_span[1], 3000)
+t_eval = np.linspace(t_span[0], t_span[1], 5000)
 sol = runge_kutta_dopri8(equations, t_span, y0, t_eval)
 
 # Извлечение решения
@@ -117,7 +117,7 @@ def animate_baton(t, X, Y, Th, l):
 
         return mass1, mass2, line_1, trajectory, trajectory1, trajectory2
 
-    ani = FuncAnimation(fig, update, interval = 1, blit=True)
+    ani = FuncAnimation(fig, update, interval = 25, blit=True)
     plt.show()
 
 animate_baton(t, X, Y, Th, l)
