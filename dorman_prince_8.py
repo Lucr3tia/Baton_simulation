@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-l = 2.0  
-m1 = 7.0  
-m2 = 3.0 
-J = 2.0  
-g = 9.81 
+l = 2.0
+m1 = 7.0
+m2 = 3.0
+J = 2.0
+g = 9.81
 
 def equations(t, y):
     x, y, theta, vx, vy, omega = y
@@ -43,13 +43,13 @@ def runge_kutta_dopri8(equations, t_span, y0, t_eval):
         t += h
         sol.append(y.copy())
 
-    return np.array(sol).T[:, :len(t_eval)] 
+    return np.array(sol).T[:, :len(t_eval)]
 
 y0 = [1.0, 1.0, np.pi / 2, 7.0, 12.0, 25.0]
 
 t_span = [0, 300]
 
-t_eval = np.linspace(t_span[0], t_span[1], 5000)
+t_eval = np.linspace(t_span[0], t_span[1], 30000)
 sol = runge_kutta_dopri8(equations, t_span, y0, t_eval)
 
 t = t_eval
@@ -88,22 +88,22 @@ def animate_baton(t, X, Y, Th, l):
     ax.legend(loc='lower left')
 
     def update(frame):
-        if frame < len(t): 
+        if frame < len(t):
             x_cm = (m1 * 0 + m2 * l) / (m1 + m2)
             mass1.set_data([X[frame] - x_cm * np.cos(Th[frame])], [Y[frame] - x_cm * np.sin(Th[frame])])
             mass2.set_data([X[frame] + (l - x_cm) * np.cos(Th[frame])], [Y[frame] + (l - x_cm) * np.sin(Th[frame])])
             line_1.set_data([X[frame] - x_cm * np.cos(Th[frame]), X[frame] + (l - x_cm) * np.cos(Th[frame])],
                             [Y[frame] - x_cm * np.sin(Th[frame]), Y[frame] + (l - x_cm) * np.sin(Th[frame])])
 
-            trajectory.set_data(X[:frame + 1], Y[:frame + 1])  
+            trajectory.set_data(X[:frame + 1], Y[:frame + 1])
             trajectory1.set_data(X[:frame + 1] - x_cm * np.cos(Th[:frame + 1]),
-                                 Y[:frame + 1] - x_cm * np.sin(Th[:frame + 1]))  
+                                 Y[:frame + 1] - x_cm * np.sin(Th[:frame + 1]))
             trajectory2.set_data(X[:frame + 1] + (l - x_cm) * np.cos(Th[:frame + 1]),
-                                 Y[:frame + 1] + (l - x_cm) * np.sin(Th[:frame + 1]))  
+                                 Y[:frame + 1] + (l - x_cm) * np.sin(Th[:frame + 1]))
 
         return mass1, mass2, line_1, trajectory, trajectory1, trajectory2
 
-    ani = FuncAnimation(fig, update, interval = 25, blit=True)
+    ani = FuncAnimation(fig, update, interval = 1, blit=True)
     plt.show()
 
 animate_baton(t, X, Y, Th, l)
