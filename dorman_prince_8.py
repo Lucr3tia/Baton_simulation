@@ -103,7 +103,7 @@ def animate_baton(t, X, Y, Th, l):
 
         return mass1, mass2, line_1, trajectory, trajectory1, trajectory2
 
-    ani = FuncAnimation(fig, update, interval = 1, blit=True)
+    ani = FuncAnimation(fig, update, interval = 1, blit=True, frames=len(t))
     plt.show()
 
 animate_baton(t, X, Y, Th, l)
