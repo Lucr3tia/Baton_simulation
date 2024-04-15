@@ -24,6 +24,7 @@ def runge_kutta_dopri8(equations, t_span, y0, t_eval):
     t = t0
     y = np.array(y0)
     sol = [y0]
+    errors = []  
 
     while t < tf:
         if t + h > tf:
@@ -32,25 +33,41 @@ def runge_kutta_dopri8(equations, t_span, y0, t_eval):
         k2 = np.array(equations(t + 1 / 18 * h, y + 1 / 18 * h * k1))
         k3 = np.array(equations(t + 1 / 12 * h, y + 1 / 48 * h * k1 + 1 / 16 * h * k2))
         k4 = np.array(equations(t + 1 / 8 * h, y + 1 / 32 * h * k1 + 1 / 16 * h * k2 + 1 / 8 * h * k3))
-        k5 = np.array(equations(t + 5 / 16 * h, y + 5 / 16 * h * k1 - 15 / 64 * h * k2 - 3 / 32 * h * k3 + 15 / 32 * h * k4))
-        k6 = np.array(equations(t + 3 / 8 * h, y + 3 / 80 * h * k1 + 3 / 16 * h * k2 + 3 / 20 * h * k3 - 9 / 400 * h * k4 + 3 / 20 * h * k5))
-        k7 = np.array(equations(t + 59 / 400 * h, y + 29443841 / 614563906 * h * k1 + 77736538 / 692538347 * h * k2 - 28693883 / 1125000000 * h * k3 + 23124283 / 1800000000 * h * k4 - 3 / 250 * h * k5))
-        k8 = np.array(equations(t + 93 / 200 * h, y + 16016141 / 946692911 * h * k1 + 61564180 / 158732637 * h * k2 + 22789713 / 633445777 * h * k3 + 545815736 / 2771057229 * h * k4 - 180193667 / 1043307555 * h * k5 + 1 / 4 * h * k7))
-        k9 = np.array(equations(t + 5490023248 / 9719169821 * h, y + 39632708 / 573591083 * h * k1 - 433636366 / 683701615 * h * k2 - 421739975 / 2616292301 * h * k3 + 100302831 / 723423059 * h * k4 + 790204164 / 839813087 * h * k5 + 800635310 / 3783071287 * h * k7))
-        k10 = np.array(equations(t + 13 / 20 * h, y + 246121993 / 1340847787 * h * k1 - 37695042795 / 15268766246 * h * k2 - 309121744 / 1061227803 * h * k3 - 12992083 / 490766935 * h * k4 + 6005943493 / 2108947869 * h * k5 + 393006217 / 1396673457 * h * k7 + 123872331 / 1001029789 * h * k8))
-        k11 = np.array(equations(t + h, y + -1028468189 / 846180014 * h * k1 + 8478235783 / 508512852 * h * k2 + 1311729495 / 1432422823 * h * k3 - 10304129995 / 1701304382 * h * k4 - 48777925059 / 3047939560 * h * k5 + 15336726248 / 1032824649 * h * k7 - 45442868181 / 3398467696 * h * k8 + 3065993473 / 597172653 * h * k9))
-        y += h * (14005451 / 335480064 * k1 + 0 * k2 + 0 * k3 + 0 * k4 + 0 * k5 + 0 * k6 + 0 * k7 + 0 * k8 + 0 * k9 + 0 * k10 + 0 * k11)
+        k5 = np.array(
+            equations(t + 5 / 16 * h, y + 5 / 16 * h * k1 - 15 / 64 * h * k2 - 3 / 32 * h * k3 + 15 / 32 * h * k4))
+        k6 = np.array(equations(t + 3 / 8 * h,
+                                y + 3 / 80 * h * k1 + 3 / 16 * h * k2 + 3 / 20 * h * k3 - 9 / 400 * h * k4 + 3 / 20 * h * k5))
+        k7 = np.array(equations(t + 59 / 400 * h,
+                                y + 29443841 / 614563906 * h * k1 + 77736538 / 692538347 * h * k2 - 28693883 / 1125000000 * h * k3 + 23124283 / 1800000000 * h * k4 - 3 / 250 * h * k5))
+        k8 = np.array(equations(t + 93 / 200 * h,
+                                y + 16016141 / 946692911 * h * k1 + 61564180 / 158732637 * h * k2 + 22789713 / 633445777 * h * k3 + 545815736 / 2771057229 * h * k4 - 180193667 / 1043307555 * h * k5 + 1 / 4 * h * k7))
+        k9 = np.array(equations(t + 5490023248 / 9719169821 * h,
+                                y + 39632708 / 573591083 * h * k1 - 433636366 / 683701615 * h * k2 - 421739975 / 2616292301 * h * k3 + 100302831 / 723423059 * h * k4 + 790204164 / 839813087 * h * k5 + 800635310 / 3783071287 * h * k7))
+        k10 = np.array(equations(t + 13 / 20 * h,
+                                 y + 246121993 / 1340847787 * h * k1 - 37695042795 / 15268766246 * h * k2 - 309121744 / 1061227803 * h * k3 - 12992083 / 490766935 * h * k4 + 6005943493 / 2108947869 * h * k5 + 393006217 / 1396673457 * h * k7 + 123872331 / 1001029789 * h * k8))
+        k11 = np.array(equations(t + h,
+                                 y + -1028468189 / 846180014 * h * k1 + 8478235783 / 508512852 * h * k2 + 1311729495 / 1432422823 * h * k3 - 10304129995 / 1701304382 * h * k4 - 48777925059 / 3047939560 * h * k5 + 15336726248 / 1032824649 * h * k7 - 45442868181 / 3398467696 * h * k8 + 3065993473 / 597172653 * h * k9))
+        y_new = y + h * (
+                    14005451 / 335480064 * k1 + 0 * k2 + 0 * k3 + 0 * k4 + 0 * k5 + 0 * k6 + 0 * k7 + 0 * k8 + 0 * k9 + 0 * k10 + 0 * k11)
+
+        delta = np.abs(h * (
+                    k1 - 263885 / 375014704 * k2 - 102847 / 846180014 * k3 - 1855075 / 688498133 * k4 - 37695042795 / 15268766246 * k5 + 4038638541 / 1415248608 * k6 - 1860736875 / 11004738443 * k7 - 12992083 / 490766935 * k8 + 6005943493 / 2108947869 * k9 + 393006217 / 1396673457 * k10 + 123872331 / 1001029789 * k11))
+        error = np.linalg.norm(delta)
+        errors.append(error)
+
         t += h
+        y = y_new
         sol.append(y.copy())
 
-    return np.array(sol).T[:, :len(t_eval)]
+    return np.array(sol).T[:, :len(t_eval)], errors
+
 
 y0 = [1.0, 1.0, np.pi / 2, 7.0, 12.0, 25.0]
 
 t_span = [0, 300]
 
-t_eval = np.linspace(t_span[0], t_span[1], 30000)
-sol = runge_kutta_dopri8(equations, t_span, y0, t_eval)
+t_eval = np.linspace(t_span[0], t_span[1], 60000)
+sol, errors = runge_kutta_dopri8(equations, t_span, y0, t_eval)
 
 t = t_eval
 X, Y, Th = sol[0], sol[1], sol[2]
@@ -73,7 +90,7 @@ plt.ylabel('deg')
 
 plt.tight_layout()
 
-def animate_baton(t, X, Y, Th, l):
+def animate_baton(t, X, Y, Th, l, errors):
     fig, ax = plt.subplots()
     ax.set_xlim([-5, 15])
     ax.set_ylim([-10, 10])
@@ -86,6 +103,8 @@ def animate_baton(t, X, Y, Th, l):
     trajectory1, = ax.plot([], [], 'b--', label='Траектория массы 1')
     trajectory2, = ax.plot([], [], 'r--', label='Траектория массы 2')
     ax.legend(loc='lower left')
+
+    error_text = ax.text(0.02, 0.95, '', transform=ax.transAxes)
 
     def update(frame):
         if frame < len(t):
@@ -101,9 +120,11 @@ def animate_baton(t, X, Y, Th, l):
             trajectory2.set_data(X[:frame + 1] + (l - x_cm) * np.cos(Th[:frame + 1]),
                                  Y[:frame + 1] + (l - x_cm) * np.sin(Th[:frame + 1]))
 
-        return mass1, mass2, line_1, trajectory, trajectory1, trajectory2
+            error_text.set_text('Error: {}'.format(errors[frame]))
 
-    ani = FuncAnimation(fig, update, interval = 1, blit=True, frames=len(t))
+        return mass1, mass2, line_1, trajectory, trajectory1, trajectory2, error_text
+
+    ani = FuncAnimation(fig, update, interval=1, blit=True, frames=len(t))
     plt.show()
 
-animate_baton(t, X, Y, Th, l)
+animate_baton(t, X, Y, Th, l, errors)
